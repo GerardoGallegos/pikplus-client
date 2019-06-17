@@ -1,24 +1,7 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
-
-const mockDesigns = [
-  {
-    id: 1,
-    name: 'Women'
-  },
-  {
-    id: 2,
-    name: 'Riatata'
-  },
-  {
-    id: 3,
-    name: 'Super man'
-  },
-  {
-    id: 4,
-    name: 'MashBrosh'
-  }
-]
+import Overdrive from 'react-overdrive'
+import { mockDesigns } from '../mockData'
 
 const Home = () => {
   const location = useLocation()
@@ -26,6 +9,7 @@ const Home = () => {
   return (
     <div>
       <h1>Home</h1>
+
       <ul>
         {mockDesigns.map(design => (
           <li key={design.id}>
@@ -37,7 +21,17 @@ const Home = () => {
               }
             }}
             >
-              {design.name}
+              {design.title}
+              <Overdrive id={design.id}>
+                <img
+                  alt='example'
+                  style={{
+                    position: 'relative',
+                    width: 150
+                  }}
+                  src={design.thumbnail}
+                />
+              </Overdrive>
             </Link>
           </li>
         ))}
