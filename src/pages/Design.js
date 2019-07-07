@@ -8,6 +8,21 @@ const Section = styled.section`
   margin: 1em auto;
 `
 
+const Colors = styled.div`
+  min-width: 100px;
+  height: 30px;
+  background: #FFF;
+  border: 1px solid gray;
+`
+
+const Color = styled.span`
+  width: 30px;
+  height: 30px;
+  background: #FFF;
+  display: inline-block;
+  border-left: 1px solid #FFF;
+`
+
 const Design = (props) => {
   const params = useParams()
   const history = useHistory()
@@ -17,14 +32,22 @@ const Design = (props) => {
     history.goBack()
   }
 
-  // console.log('params', params,)
-  // { props.location.state.design.name }
   return (
     <Section>
       <button onClick={back}>
         Back
       </button>
-      <h1>{props.location.state.design.title}</h1>
+      <h1>{props.location.state.design.description}</h1>
+      <Colors>
+        {props.location.state.design.colorsRGB.map((color, i) => (
+          <Color
+            key={i}
+            style={{
+              background: `rgba(${color[0]},${color[1]},${color[2]})`
+            }}
+          />
+        ))}
+      </Colors>
       <Overdrive id={params.id} duration={400}>
         <img
           alt='morgan'
@@ -32,7 +55,7 @@ const Design = (props) => {
             position: 'relative',
             width: 500
           }}
-          src={props.location.state.design.src}
+          src={props.location.state.design.source.s300}
         />
       </Overdrive>
     </Section>
