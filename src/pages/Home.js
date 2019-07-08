@@ -8,6 +8,9 @@ const Home = () => {
   const location = useLocation()
   const [designs, setDesigns] = useState([])
   const [isLoading, setLoading] = useState(true)
+  const [hasMore, setHasMore] = useState(true)
+  const [error, setError] = useState(null)
+  const [total, setTotal] = useState(0)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -15,6 +18,13 @@ const Home = () => {
       const res = await axios.get('http://localhost:4000/api/designs')
       const { designs, error, hasMore, total } = res.data
       setDesigns(designs)
+      setLoading(false)
+      setHasMore(hasMore)
+      setTotal(total)
+
+      if (error) {
+        setError(error)
+      }
     }
 
     fetchData()
@@ -22,35 +32,41 @@ const Home = () => {
 
   return (
     <div>
-      <h1>Home</h1>
+      <h1>Home Designs {total}</h1>
       <Dropzone />
 
-      <ul>
-        {designs.map(design => (
-          <li key={design.id}>
-            <Link to={{
-              pathname: `/design/${design._id}`,
-              state: {
-                design,
-                background: location
-              }
-            }}
-            >
-              {design.title}
-              <Overdrive id={design._id}>
-                <img
-                  alt='example'
-                  style={{
-                    position: 'relative',
-                    width: 150
-                  }}
-                  src={design.source.s200}
-                />
-              </Overdrive>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {isLoading
+        ? (
+          <div>Loading</div>
+        )
+        : (
+          <ul>
+            {designs.map(design => (
+              <li key={design.id}>
+                <Link to={{
+                  pathname: `/design/${design._id}`,
+                  state: {
+                    design,
+                    background: location
+                  }
+                }}
+                >
+                  {design.title}
+                  <Overdrive id={design._id}>
+                    <img
+                      alt='example'
+                      style={{
+                        position: 'relative',
+                        width: 150
+                      }}
+                      src={design.source.s200}
+                    />
+                  </Overdrive>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
     </div>
   )
 }
