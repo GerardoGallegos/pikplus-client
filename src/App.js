@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Switch, useLocation } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { createGlobalStyle } from 'styled-components'
 import './App.css'
 
@@ -20,27 +20,28 @@ const GlobalStyles = createGlobalStyle`
   }
 `
 
-const ModalSwitch = () => {
-  const location = useLocation()
-  return (
-    <div>
-      <Navegation />
-      <Switch location={location}>
-        <Route path='/design/:id' component={Design} />
-        <Route path='/' exact component={Home} />
-        <Route path='/login' component={Login} />
-        <Route path='/signup' component={Signup} />
-      </Switch>
-    </div>
-  )
-}
-
 const App = () => {
+  const signin = () => {
+    alert('signin')
+  }
+
   return (
     <>
       <GlobalStyles />
       <Router>
-        <ModalSwitch />
+        <Navegation />
+        <Switch>
+          <Route path='/design/:id' component={Design} />
+          <Route path='/' exact component={Home} />
+          <Route
+            path='/login'
+            component={(props) => <Login {...props} onSignin={signin} />}
+          />
+          <Route
+            path='/signup'
+            component={(props) => <Signup {...props} onSignin={signin} />}
+          />
+        </Switch>
       </Router>
     </>
   )
