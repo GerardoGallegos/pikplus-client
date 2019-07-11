@@ -16,7 +16,7 @@ export const getItem = (key, defaulValue = null) => {
 export const setItem = (key, value) => {
   try {
     const serialized = JSON.stringify(value)
-    window.localStorage.getItem(key, serialized)
+    window.localStorage.setItem(key, serialized)
   } catch (error) {
     // Ignore error
   }

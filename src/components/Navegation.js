@@ -22,7 +22,7 @@ const activeStyles = {
 }
 
 const Navigation = () => {
-  const { isLoggedIn, user, onLogout } = useContext(AppContext)
+  const { isLoggedIn, user, logout } = useContext(AppContext)
 
   return (
     <Nav>
@@ -35,7 +35,7 @@ const Navigation = () => {
             <NavLink to='/profile' activeStyle={activeStyles}>
               {user.fullname}
             </NavLink>
-            <NavLink to='/' activeStyle={activeStyles} onClick={onLogout}>
+            <NavLink to='/' activeStyle={activeStyles} onClick={logout}>
               logout
             </NavLink>
           </>

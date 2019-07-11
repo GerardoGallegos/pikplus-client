@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import axios from 'axios'
+import { Redirect } from 'react-router-dom'
 import { useFormik } from 'formik'
+import AppContext from '../AppContext'
 
 // A custom validation function. This must return an object
 // which keys are symmetrical to our values/initialValues
@@ -27,8 +29,8 @@ const validate = values => {
   return errors
 }
 
-const Signup = (props) => {
-  console.log(props)
+const Signup = () => {
+  const { isLoggedIn, signin } = useContext(AppContext)
   // Notice that we have to initialize ALL of fields with values. These
   // could come from props, but since we don't want to prefill this form,
   // we just use an empty string. If you don't do this, React will yell
@@ -52,10 +54,15 @@ const Signup = (props) => {
         window.localStorage.setItem('token', token)
         window.localStorage.setItem('refreshToken', refreshToken)
         window.localStorage.setItem('user', JSON.stringify(user))
-        props.onSignin(user)
+        signin(user)
       }
     }
   })
+
+  if (isLoggedIn) {
+    return <Redirect to='/' />
+  }
+
   return (
     <form onSubmit={formik.handleSubmit}>
       {formik.errors.fullname ? <div>{formik.errors.fullname}</div> : null}
@@ -72,7 +79,7 @@ const Signup = (props) => {
       <input
         id='password'
         name='password'
-        type='text'
+        type='password'
         onChange={formik.handleChange}
         value={formik.values.password}
       />
