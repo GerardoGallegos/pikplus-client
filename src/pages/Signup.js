@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 import { useFormik } from 'formik'
 
 // A custom validation function. This must return an object
@@ -26,7 +27,8 @@ const validate = values => {
   return errors
 }
 
-const Signup = () => {
+const Signup = (props) => {
+  console.log(props)
   // Notice that we have to initialize ALL of fields with values. These
   // could come from props, but since we don't want to prefill this form,
   // we just use an empty string. If you don't do this, React will yell
@@ -38,8 +40,19 @@ const Signup = () => {
       email: ''
     },
     validate,
-    onSubmit: values => {
-      console.log(JSON.stringify(values, null, 2))
+    onSubmit: async (formData) => {
+      const { data } = await axios.post('http://localhost:4000/api/signup', { user: formData })
+      const { error, errorMessage, token, refreshToken, user } = data
+
+      if (error) {
+        return alert(errorMessage)
+      }
+
+      if (token && refreshToken) {
+        window.localStorage.setItem('token', token)
+        window.localStorage.setItem('refreshToken', refreshToken)
+        window.localStorage.setItem('user', user)
+      }
     }
   })
   return (
