@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { createGlobalStyle } from 'styled-components'
+import { AppProvider } from './AppContext'
+import { getItem, removeItem } from './util/localStorage'
 import './App.css'
 
 import Navegation from './components/Navegation'
@@ -21,29 +23,42 @@ const GlobalStyles = createGlobalStyle`
 `
 
 const App = () => {
-  const signin = () => {
-    alert('signin')
+  const [user, setUser] = useState(getItem('user'))
+  const [isLoggedIn, setIsLoggedIn] = useState(user && typeof user.fullname === 'string')
+
+  const signin = (user) => {
+    setUser(user)
+    setIsLoggedIn(true)
+  }
+
+  const logout = () => {
+    removeItem('token')
+    removeItem('refreshToken')
+    removeItem('user')
+    setUser({})
+    setIsLoggedIn(false)
+  }
+
+  const value = {
+    user,
+    isLoggedIn,
+    signin,
+    logout
   }
 
   return (
-    <>
+    <AppProvider value={value}>
       <GlobalStyles />
       <Router>
-        <Navegation />
+        <Navegation onLogout={logout} />
         <Switch>
-          <Route path='/design/:id' component={Design} />
           <Route path='/' exact component={Home} />
-          <Route
-            path='/login'
-            component={(props) => <Login {...props} onSignin={signin} />}
-          />
-          <Route
-            path='/signup'
-            component={(props) => <Signup {...props} onSignin={signin} />}
-          />
+          <Route path='/design/:id' component={Design} />
+          <Route path='/login' component={Login} />
+          <Route path='/signup' component={Signup} />
         </Switch>
       </Router>
-    </>
+    </AppProvider>
   )
 }
 

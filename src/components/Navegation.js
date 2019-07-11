@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { NavLink as UnstyleNavLink } from 'react-router-dom'
 import styled from 'styled-components'
+import AppContext from '../AppContext'
 
 const Nav = styled.nav`
   width: 100%;
@@ -21,17 +22,34 @@ const activeStyles = {
 }
 
 const Navigation = () => {
+  const { isLoggedIn, user, onLogout } = useContext(AppContext)
+
   return (
     <Nav>
       <NavLink to='/' activeStyle={activeStyles} exact>
         PikPlus
       </NavLink>
-      <NavLink to='/login' activeStyle={activeStyles}>
-        Login
-      </NavLink>
-      <NavLink to='/signup' activeStyle={activeStyles}>
-        Signup
-      </NavLink>
+      {isLoggedIn
+        ? (
+          <>
+            <NavLink to='/profile' activeStyle={activeStyles}>
+              {user.fullname}
+            </NavLink>
+            <NavLink to='/' activeStyle={activeStyles} onClick={onLogout}>
+              logout
+            </NavLink>
+          </>
+        )
+        : (
+          <>
+            <NavLink to='/login' activeStyle={activeStyles}>
+              Login
+            </NavLink>
+            <NavLink to='/signup' activeStyle={activeStyles}>
+              Signup
+            </NavLink>
+          </>
+        )}
     </Nav>
   )
 }

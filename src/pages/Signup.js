@@ -51,7 +51,8 @@ const Signup = (props) => {
       if (token && refreshToken) {
         window.localStorage.setItem('token', token)
         window.localStorage.setItem('refreshToken', refreshToken)
-        window.localStorage.setItem('user', user)
+        window.localStorage.setItem('user', JSON.stringify(user))
+        props.onSignin(user)
       }
     }
   })
