@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 import { Redirect, useHistory } from 'react-router-dom'
 import { useFormik } from 'formik'
-import axios from 'axios'
 import { setItem } from '../util/localStorage'
 import AppContext from '../AppContext'
+import { Auth } from '../util/api'
 
 const validate = values => {
   const errors = {}
@@ -34,8 +34,7 @@ const Login = () => {
     },
     validate,
     onSubmit: async (formData) => {
-      const { data } = await axios.post('http://localhost:4000/api/auth', { credentials: formData })
-      const { error, errorMessage, token, refreshToken, user } = data
+      const { error, errorMessage, token, refreshToken, user } = await Auth.login(formData)
 
       if (error) {
         return alert(errorMessage)

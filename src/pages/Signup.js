@@ -1,8 +1,9 @@
 import React, { useContext } from 'react'
-import axios from 'axios'
 import { Redirect } from 'react-router-dom'
 import { useFormik } from 'formik'
 import AppContext from '../AppContext'
+import { setItem } from '../util/localStorage'
+import { Auth } from '../util/api'
 
 // A custom validation function. This must return an object
 // which keys are symmetrical to our values/initialValues
@@ -43,17 +44,16 @@ const Signup = () => {
     },
     validate,
     onSubmit: async (formData) => {
-      const { data } = await axios.post('http://localhost:4000/api/signup', { user: formData })
-      const { error, errorMessage, token, refreshToken, user } = data
+      const { error, errorMessage, token, refreshToken, user } = await Auth.signup(formData)
 
       if (error) {
         return alert(errorMessage)
       }
 
       if (token && refreshToken) {
-        window.localStorage.setItem('token', token)
-        window.localStorage.setItem('refreshToken', refreshToken)
-        window.localStorage.setItem('user', JSON.stringify(user))
+        setItem('token', token)
+        setItem('refreshToken', refreshToken)
+        setItem('user', JSON.stringify(user))
         signin(user)
       }
     }
