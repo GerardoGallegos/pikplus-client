@@ -42,7 +42,7 @@ const Home = () => {
         : (
           <ul>
             {designs.map(design => (
-              <li key={design.id}>
+              <li key={design._id}>
                 <Link to={{
                   pathname: `/design/${design._id}`,
                   state: {
